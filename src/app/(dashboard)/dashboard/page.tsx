@@ -11,18 +11,18 @@ export default async function DashboardPage() {
   if (!dbUser) redirect("/login");
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <h2 className="font-heading font-bold text-2xl text-brand-blue mb-2">
+    <div className="max-w-7xl mx-auto px-6 py-10">
+      <h2 className="font-heading font-bold text-3xl text-brand-blue mb-2">
         Bienvenido, {dbUser.name}
       </h2>
-      <p className="text-brand-gray/60 mb-8">
+      <p className="text-brand-gray/60 text-lg mb-10">
         Panel de {dbUser.role === "ADMIN" ? "Administración" :
                   dbUser.role === "DRIVER" ? "Conductor" :
                   dbUser.role === "SUPERVISOR" ? "Supervisor" :
                   dbUser.role === "MECHANIC" ? "Mecánico" : "Gerencia"}
       </p>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {["ADMIN", "DRIVER", "SUPERVISOR"].includes(dbUser.role) && (
           <Card
             title="Checklist Diario"
@@ -66,12 +66,12 @@ function Card({ title, desc, href, color }: {
   return (
     <a
       href={href}
-      className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition"
+      className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition"
     >
-      <h3 className="font-heading font-bold text-lg mb-1" style={{ color }}>
+      <h3 className="font-heading font-bold text-xl mb-2" style={{ color }}>
         {title}
       </h3>
-      <p className="text-brand-gray/70 text-sm">{desc}</p>
+      <p className="text-brand-gray/70 text-base">{desc}</p>
     </a>
   );
 }

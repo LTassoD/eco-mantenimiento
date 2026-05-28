@@ -30,15 +30,13 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-brand-blue text-white">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="font-heading font-bold text-lg">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <h1 className="font-heading font-bold text-xl md:text-2xl">
             Eco<span className="text-brand-neon">Mantenimiento</span>
           </h1>
-          <div className="flex items-center gap-4 text-sm">
-            <span className="opacity-80">
-              {dbUser.name}
-            </span>
-            <span className="bg-white/20 px-2 py-0.5 rounded text-xs">
+          <div className="flex items-center gap-4 text-base">
+            <span className="opacity-80">{dbUser.name}</span>
+            <span className="bg-white/20 px-3 py-1 rounded text-sm">
               {roleLabel[dbUser.role] || dbUser.role}
             </span>
             <form action={logout}>
@@ -54,7 +52,7 @@ export default async function DashboardLayout({
       </header>
 
       <nav className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-2 flex gap-6 text-sm">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex gap-8 text-base">
           <DashboardLink href="/dashboard" label="Inicio" />
           {["ADMIN", "SUPERVISOR", "DRIVER"].includes(dbUser.role) && (
             <DashboardLink href="/checklist" label="Checklist" />

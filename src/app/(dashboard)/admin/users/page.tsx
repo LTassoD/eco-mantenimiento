@@ -24,13 +24,13 @@ export default async function AdminUsersPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <h2 className="font-heading font-bold text-2xl text-brand-blue mb-6">
+    <div className="max-w-7xl mx-auto px-6 py-10">
+      <h2 className="font-heading font-bold text-3xl text-brand-blue mb-8">
         Usuarios
       </h2>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <table className="w-full text-base">
           <thead className="bg-brand-blue text-white">
             <tr>
               <th className="text-left px-4 py-3 font-medium">Nombre</th>

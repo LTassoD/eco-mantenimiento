@@ -26,9 +26,9 @@ export default function Home() {
               para los vehículos de Ecológica.
             </p>
             <div className="flex gap-4">
-              <div className="bg-brand-neon text-brand-blue font-heading font-bold px-6 py-3 rounded-lg cursor-pointer hover:opacity-90 transition">
+              <a href="/login" className="bg-brand-neon text-brand-blue font-heading font-bold px-6 py-3 rounded-lg hover:opacity-90 transition">
                 Iniciar sesión
-              </div>
+              </a>
               <div className="border border-white text-white font-heading font-bold px-6 py-3 rounded-lg cursor-pointer hover:bg-white/10 transition">
                 Más información
               </div>
