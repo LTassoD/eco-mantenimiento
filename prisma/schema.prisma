@@ -8,6 +8,7 @@ datasource db {
 }
 
 enum UserRole {
+  ADMIN
   DRIVER
   SUPERVISOR
   MECHANIC
@@ -52,7 +53,6 @@ model User {
   id            String   @id @default(cuid())
   name          String
   email         String   @unique
-  password      String
   role          UserRole
   phone         String?
   isActive      Boolean  @default(true)
