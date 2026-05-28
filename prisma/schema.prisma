@@ -1,0 +1,222 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  DRIVER
+  SUPERVISOR
+  MECHANIC
+  MANAGER
+}
+
+enum Shift {
+  A
+  B
+  SMART_MORNING
+  SMART_AFTERNOON
+}
+
+enum ChecklistStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_PARTS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketType {
+  PREVENTIVE
+  CORRECTIVE
+  INSPECTION
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  password      String
+  role          UserRole
+  phone         String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  assignedVehicles Vehicle[] @relation("DriverVehicles")
+  checklists       Checklist[]
+  reviewedChecklists Checklist[] @relation("SupervisorChecklists")
+  reportedTickets  MaintenanceTicket[] @relation("ReportedTickets")
+  assignedTickets  MaintenanceTicket[] @relation("AssignedTickets")
+  notifications    Notification[]
+}
+
+model Vehicle {
+  id              String   @id @default(cuid())
+  plate           String   @unique
+  brand           String
+  model           String
+  year            Int
+  vin             String?
+  currentKm       Int      @default(0)
+  /// Kilometraje para próximo mantenimiento preventivo
+  nextServiceKm   Int?
+  /// Cada cuántos km se hace mantenimiento
+  kmServiceInterval Int?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  driverId        String?
+  driver          User?    @relation("DriverVehicles", fields: [driverId], references: [id])
+  checklists      Checklist[]
+  tickets         MaintenanceTicket[]
+}
+
+model ChecklistTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items     ChecklistItem[]
+  checklists Checklist[]
+}
+
+model ChecklistItem {
+  id          String @id @default(cuid())
+  templateId  String
+  template    ChecklistTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  /// Ej: Motor, Luces, Neumáticos, Seguridad, etc.
+  category    String
+  /// Ej: Nivel de aceite, Luces delanteras, etc.
+  name        String
+  order       Int
+  isRequired  Boolean @default(true)
+  createdAt   DateTime @default(now())
+
+  responses ChecklistResponse[]
+
+  @@index([templateId])
+  @@index([category])
+}
+
+model Checklist {
+  id              String          @id @default(cuid())
+  vehicleId       String
+  vehicle         Vehicle         @relation(fields: [vehicleId], references: [id])
+  driverId        String
+  driver          User            @relation(fields: [driverId], references: [id])
+  templateId      String
+  template        ChecklistTemplate @relation(fields: [templateId], references: [id])
+  shift           Shift
+  currentKm       Int
+  notes           String?
+  status          ChecklistStatus @default(PENDING)
+  supervisorId    String?
+  supervisor      User?           @relation("SupervisorChecklists", fields: [supervisorId], references: [id])
+  reviewedAt      DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  responses ChecklistResponse[]
+  tickets   MaintenanceTicket[]
+
+  @@index([vehicleId])
+  @@index([driverId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ChecklistResponse {
+  id          String        @id @default(cuid())
+  checklistId String
+  checklist   Checklist     @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+  itemId      String
+  item        ChecklistItem @relation(fields: [itemId], references: [id])
+  /// yes, no, na
+  value       String
+  photoUrl    String?
+  notes       String?
+  createdAt   DateTime      @default(now())
+
+  @@index([checklistId])
+  @@index([itemId])
+}
+
+model MaintenanceTicket {
+  id            String        @id @default(cuid())
+  checklistId   String?
+  checklist     Checklist?    @relation(fields: [checklistId], references: [id])
+  vehicleId     String
+  vehicle       Vehicle       @relation(fields: [vehicleId], references: [id])
+  reportedById  String
+  reportedBy    User          @relation("ReportedTickets", fields: [reportedById], references: [id])
+  assignedToId  String?
+  assignedTo    User?         @relation("AssignedTickets", fields: [assignedToId], references: [id])
+  title         String
+  description   String?
+  priority      TicketPriority @default(MEDIUM)
+  status        TicketStatus  @default(OPEN)
+  ticketType    TicketType    @default(CORRECTIVE)
+  currentKm     Int?
+  scheduledDate DateTime?
+  completedDate DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  parts MaintenancePart[]
+
+  @@index([vehicleId])
+  @@index([status])
+  @@index([priority])
+  @@index([assignedToId])
+}
+
+model MaintenancePart {
+  id        String   @id @default(cuid())
+  ticketId  String
+  ticket    MaintenanceTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  name      String
+  quantity  Int      @default(1)
+  unitCost  Float?
+  totalCost Float?
+  createdAt DateTime @default(now())
+
+  @@index([ticketId])
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  message     String?
+  /// checklist_pending, ticket_assigned, ticket_updated, maintenance_due
+  type        String
+  isRead      Boolean  @default(false)
+  relatedId   String?
+  relatedType String?
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+}
