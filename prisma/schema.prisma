@@ -49,6 +49,15 @@ enum TicketType {
   INSPECTION
 }
 
+model WorkCenter {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  users    User[]
+  vehicles Vehicle[]
+}
+
 model User {
   id            String   @id @default(cuid())
   name          String
@@ -56,15 +65,17 @@ model User {
   role          UserRole
   phone         String?
   isActive      Boolean  @default(true)
+  workCenterId  String?
+  workCenter    WorkCenter? @relation(fields: [workCenterId], references: [id])
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  assignedVehicles Vehicle[] @relation("DriverVehicles")
-  checklists       Checklist[]
-  reviewedChecklists Checklist[] @relation("SupervisorChecklists")
-  reportedTickets  MaintenanceTicket[] @relation("ReportedTickets")
-  assignedTickets  MaintenanceTicket[] @relation("AssignedTickets")
-  notifications    Notification[]
+  assignedVehicles   Vehicle[]           @relation("DriverVehicles")
+  checklists         Checklist[]
+  reviewedChecklists Checklist[]         @relation("SupervisorChecklists")
+  reportedTickets    MaintenanceTicket[] @relation("ReportedTickets")
+  assignedTickets    MaintenanceTicket[] @relation("AssignedTickets")
+  notifications      Notification[]
 }
 
 model Vehicle {
@@ -84,7 +95,9 @@ model Vehicle {
   updatedAt       DateTime @updatedAt
 
   driverId        String?
-  driver          User?    @relation("DriverVehicles", fields: [driverId], references: [id])
+  driver          User?       @relation("DriverVehicles", fields: [driverId], references: [id])
+  workCenterId    String?
+  workCenter      WorkCenter? @relation(fields: [workCenterId], references: [id])
   checklists      Checklist[]
   tickets         MaintenanceTicket[]
 }
@@ -131,6 +144,9 @@ model Checklist {
   currentKm       Int
   notes           String?
   status          ChecklistStatus @default(PENDING)
+  /// Base64 de la firma digital
+  digitalSignature String?
+  signedAt        DateTime?
   supervisorId    String?
   supervisor      User?           @relation("SupervisorChecklists", fields: [supervisorId], references: [id])
   reviewedAt      DateTime?

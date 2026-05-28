@@ -2,7 +2,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
 const roleRoutes: Record<string, string[]> = {
-  "/admin": ["ADMIN"],
+  "/admin": ["ADMIN", "SUPERVISOR"],
+  "/vehiculos": ["ADMIN", "SUPERVISOR"],
   "/checklist": ["DRIVER", "SUPERVISOR", "ADMIN"],
   "/maintenance": ["MECHANIC", "SUPERVISOR", "ADMIN"],
   "/reports": ["MANAGER", "ADMIN"],

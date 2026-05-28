@@ -24,36 +24,19 @@ export default async function DashboardPage() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {["ADMIN", "DRIVER", "SUPERVISOR"].includes(dbUser.role) && (
-          <Card
-            title="Checklist Diario"
-            desc="Registra el estado del vehículo al inicio del turno"
-            href="/checklist"
-            color="brand-blue"
-          />
+          <Card title="Checklist Diario" desc="Registra el estado del vehículo al inicio del turno" href="/checklist" color="brand-blue" />
+        )}
+        {["ADMIN", "SUPERVISOR"].includes(dbUser.role) && (
+          <Card title="Vehículos" desc="Administra camiones y asigna centros de trabajo" href="/vehiculos" color="brand-green" />
         )}
         {["ADMIN", "SUPERVISOR", "MECHANIC"].includes(dbUser.role) && (
-          <Card
-            title="Órdenes de Mantenimiento"
-            desc="Gestiona y da seguimiento a reparaciones"
-            href="/maintenance"
-            color="brand-green"
-          />
+          <Card title="Órdenes de Mantenimiento" desc="Gestiona y da seguimiento a reparaciones" href="/maintenance" color="brand-green" />
         )}
         {["ADMIN", "MANAGER"].includes(dbUser.role) && (
-          <Card
-            title="Reportes"
-            desc="KPIs, alertas e indicadores de flota"
-            href="/reports"
-            color="#454545"
-          />
+          <Card title="Reportes" desc="KPIs, alertas e indicadores de flota" href="/reports" color="#454545" />
         )}
-        {dbUser.role === "ADMIN" && (
-          <Card
-            title="Usuarios"
-            desc="Administra conductores, supervisores y mecánicos"
-            href="/admin/users"
-            color="#021793"
-          />
+        {["ADMIN", "SUPERVISOR"].includes(dbUser.role) && (
+          <Card title="Usuarios" desc="Administra conductores, supervisores y mecánicos" href="/admin/users" color="#021793" />
         )}
       </div>
     </div>
