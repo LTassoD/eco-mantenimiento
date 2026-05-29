@@ -12,6 +12,7 @@ export default function ChecklistPage() {
   const [signature, setSignature] = useState<string | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const searchParams = useSearchParams();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const router = useRouter();
@@ -78,7 +79,6 @@ export default function ChecklistPage() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    setSignature(null);
   }
 
   function takePhoto(itemId: string) {
@@ -230,32 +230,60 @@ export default function ChecklistPage() {
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
           <h3 className="font-heading font-bold text-xl text-brand-blue mb-4">Firma digital</h3>
-          <p className="text-brand-gray/60 text-sm mb-4">Firma con el dedo en el recuadro</p>
-          <div className="border-2 border-dashed border-gray-300 rounded-xl overflow-hidden mb-3" style={{ width: 320, height: 120 }}>
-            <canvas
-              ref={canvasRef}
-              width={320}
-              height={120}
-              className="bg-white cursor-crosshair"
-              onMouseDown={startDrawing}
-              onMouseMove={draw}
-              onMouseUp={stopDrawing}
-              onMouseLeave={stopDrawing}
-              onTouchStart={startDrawing}
-              onTouchMove={draw}
-              onTouchEnd={stopDrawing}
-            />
-          </div>
-          <div className="flex gap-3">
-            <button type="button" onClick={saveSignature} className="bg-brand-blue text-white font-medium px-5 py-2 rounded-xl text-sm hover:opacity-90 transition">
-              Guardar firma
-            </button>
-            <button type="button" onClick={clearSignature} className="border border-gray-300 text-brand-gray font-medium px-5 py-2 rounded-xl text-sm hover:bg-gray-50 transition">
-              Limpiar
-            </button>
-          </div>
-          {signature && <p className="text-green-600 text-sm mt-2">✓ Firma guardada</p>}
+          {signature ? (
+            <div>
+              <img src={signature} alt="Firma" className="border border-gray-300 rounded-xl mb-3 h-20" />
+              <div className="flex gap-3">
+                <button type="button" onClick={() => setSignature(null)} className="border border-gray-300 text-brand-gray font-medium px-5 py-2 rounded-xl text-sm hover:bg-gray-50 transition">
+                  Volver a firmar
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <p className="text-brand-gray/60 text-sm mb-4">Firma con el dedo en el recuadro</p>
+              <button type="button" onClick={() => setShowModal(true)} className="bg-brand-blue text-white font-medium px-5 py-2.5 rounded-xl text-sm hover:opacity-90 transition">
+                Abrir firmador
+              </button>
+            </div>
+          )}
         </div>
+
+        {showModal && (
+          <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
+            <div className="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+              <h3 className="font-heading font-bold text-xl text-brand-blue mb-1">Firma digital</h3>
+              <p className="text-brand-gray/60 text-sm mb-4">Firma con el dedo en el recuadro</p>
+              <div className="border-2 border-dashed border-gray-300 rounded-xl overflow-hidden mb-4 touch-none" style={{ width: "100%", height: 200 }}>
+                <canvas
+                  ref={canvasRef}
+                  width={500}
+                  height={200}
+                  className="bg-white cursor-crosshair w-full h-full"
+                  style={{ touchAction: "none" }}
+                  onMouseDown={startDrawing}
+                  onMouseMove={draw}
+                  onMouseUp={stopDrawing}
+                  onMouseLeave={stopDrawing}
+                  onTouchStart={startDrawing}
+                  onTouchMove={draw}
+                  onTouchEnd={stopDrawing}
+                />
+              </div>
+              <div className="flex gap-3">
+                <button type="button" onClick={() => { saveSignature(); setShowModal(false); }} className="bg-brand-blue text-white font-medium px-5 py-2.5 rounded-xl text-sm hover:opacity-90 transition flex-1">
+                  Guardar firma
+                </button>
+                <button type="button" onClick={clearSignature} className="border border-gray-300 text-brand-gray font-medium px-5 py-2.5 rounded-xl text-sm hover:bg-gray-50 transition">
+                  Limpiar
+                </button>
+                <button type="button" onClick={() => setShowModal(false)} className="border border-gray-300 text-brand-gray font-medium px-5 py-2.5 rounded-xl text-sm hover:bg-gray-50 transition">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <button type="submit" disabled={submitting} className="w-full bg-brand-blue text-white font-heading font-bold text-lg py-4 rounded-xl hover:opacity-90 transition disabled:opacity-50">
           {submitting ? "Enviando..." : "Enviar checklist"}
