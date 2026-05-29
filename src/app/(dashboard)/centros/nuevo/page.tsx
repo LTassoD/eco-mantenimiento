@@ -33,7 +33,7 @@ export default function NewCenterPage() {
   }
 
   return (
-    <div className="max-w-xl mx-auto px-6 py-10">
+    <div className="max-w-xl mx-auto px-4 sm:px-6 py-10">
       <h2 className="font-heading font-bold text-3xl text-brand-blue mb-8">Nuevo centro de trabajo</h2>
 
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-5">

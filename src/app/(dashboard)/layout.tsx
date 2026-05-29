@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { logout } from "../(auth)/login/actions";
+import { MobileNav, DesktopNav } from "./nav.client";
 
 export default async function DashboardLayout({
   children,
@@ -30,69 +31,47 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-brand-blue text-white">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <h1 className="font-heading font-bold text-xl md:text-2xl">
-            Eco<span className="text-brand-neon">Mantenimiento</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+          <h1 className="font-heading font-bold text-lg sm:text-2xl">
+            <span className="hidden sm:inline">Eco</span><span className="text-brand-neon">Mantenimiento</span>
           </h1>
-          <div className="flex items-center gap-4 text-base">
-            <span className="opacity-80">{dbUser.name}</span>
-            <span className="bg-white/20 px-3 py-1 rounded text-sm">
-              {roleLabel[dbUser.role] || dbUser.role}
-            </span>
-            <form action={logout}>
+          <div className="flex items-center gap-2 sm:gap-4">
+            <MobileNav role={dbUser.role} userName={dbUser.name} roleLabel={roleLabel[dbUser.role] || dbUser.role} />
+            <form action={logout} className="hidden sm:block">
               <button
                 type="submit"
-                className="text-sm opacity-70 hover:opacity-100 underline underline-offset-2"
+                className="text-sm opacity-70 hover:opacity-100 underline underline-offset-2 whitespace-nowrap"
               >
                 Cerrar sesión
               </button>
             </form>
           </div>
         </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-3 sm:hidden flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm opacity-80 truncate">
+            <span className="truncate max-w-[160px]">{dbUser.name}</span>
+            <span className="bg-white/20 px-2 py-0.5 rounded text-xs shrink-0">
+              {roleLabel[dbUser.role] || dbUser.role}
+            </span>
+          </div>
+          <form action={logout}>
+            <button
+              type="submit"
+              className="text-xs opacity-70 hover:opacity-100 underline underline-offset-2"
+            >
+              Cerrar sesión
+            </button>
+          </form>
+        </div>
       </header>
 
-      <nav className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex gap-8 text-base">
-          <DashboardLink href="/dashboard" label="Inicio" />
-          {["ADMIN", "SUPERVISOR", "DRIVER"].includes(dbUser.role) && (
-            <DashboardLink href="/checklist" label="Checklist" />
-          )}
-          {["ADMIN", "SUPERVISOR", "DRIVER"].includes(dbUser.role) && (
-            <DashboardLink href="/checklist/historial" label="Historial" />
-          )}
-          {["ADMIN", "SUPERVISOR"].includes(dbUser.role) && (
-            <DashboardLink href="/checklist/revisar" label="Revisar" />
-          )}
-          {["ADMIN", "SUPERVISOR"].includes(dbUser.role) && (
-            <DashboardLink href="/centros" label="Centros" />
-          )}
-          {["ADMIN", "SUPERVISOR", "MANAGER"].includes(dbUser.role) && (
-            <DashboardLink href="/vehiculos" label="Vehículos" />
-          )}
-          {["ADMIN", "SUPERVISOR", "MECHANIC", "MANAGER"].includes(dbUser.role) && (
-            <DashboardLink href="/maintenance" label="Mantenimiento" />
-          )}
-          {["ADMIN", "MANAGER"].includes(dbUser.role) && (
-            <DashboardLink href="/reports" label="Reportes" />
-          )}
-          {["ADMIN", "SUPERVISOR"].includes(dbUser.role) && (
-            <DashboardLink href="/admin/users" label="Usuarios" />
-          )}
+      <nav className="bg-white border-b border-gray-200 hidden sm:block">
+        <div className="max-w-7xl mx-auto px-6 py-3 overflow-x-auto">
+          <DesktopNav role={dbUser.role} />
         </div>
       </nav>
 
       <main className="flex-1 bg-brand-light">{children}</main>
     </div>
-  );
-}
-
-function DashboardLink({ href, label }: { href: string; label: string }) {
-  return (
-    <a
-      href={href}
-      className="text-brand-gray hover:text-brand-blue font-medium transition-colors"
-    >
-      {label}
-    </a>
   );
 }

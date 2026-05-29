@@ -16,7 +16,7 @@ export default async function CentersPage() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div className="flex items-center justify-between mb-8">
         <h2 className="font-heading font-bold text-3xl text-brand-blue">Centros de Trabajo</h2>
         <a href="/centros/nuevo" className="bg-brand-blue text-white font-heading font-bold px-5 py-2.5 rounded-xl text-sm hover:opacity-90 transition">

@@ -118,7 +118,7 @@ export function VehicleDetailClient({
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
       <div className="flex items-center justify-between mb-8">
         <h2 className="font-heading font-bold text-3xl text-brand-blue">
           {vehicle.plate}

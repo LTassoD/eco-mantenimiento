@@ -51,7 +51,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-brand-blue flex items-center justify-center p-6">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-10">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-6 sm:p-10">
         <div className="text-center mb-10">
           <h1 className="font-heading font-black text-3xl md:text-4xl text-brand-blue">
             Eco<span className="text-brand-green">Mantenimiento</span>

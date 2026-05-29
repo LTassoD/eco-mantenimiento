@@ -6,7 +6,9 @@ const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL!,
-  ssl: { rejectUnauthorized: false },
+  ssl: process.env.DATABASE_URL?.includes("pooler.supabase.com")
+    ? { rejectUnauthorized: false }
+    : undefined,
 });
 
 const adapter = new PrismaPg(pool);

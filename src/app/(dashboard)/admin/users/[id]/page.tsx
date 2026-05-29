@@ -88,7 +88,7 @@ export default function EditUserPage() {
   if (!user) return <div className="p-10 text-center text-brand-gray/60">Usuario no encontrado</div>;
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-10">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
       <div className="flex items-center justify-between mb-8">
         <h2 className="font-heading font-bold text-3xl text-brand-blue">Editar usuario</h2>
       </div>

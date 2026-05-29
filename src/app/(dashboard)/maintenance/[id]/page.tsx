@@ -82,7 +82,7 @@ export default function MaintenanceDetailPage() {
   });
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="font-heading font-bold text-3xl text-brand-blue">{ticket.title}</h2>

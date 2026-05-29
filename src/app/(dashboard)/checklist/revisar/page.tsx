@@ -17,7 +17,7 @@ export default async function ReviewListPage() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <h2 className="font-heading font-bold text-3xl text-brand-blue mb-2">Revisar Checklists</h2>
       <p className="text-brand-gray/60 text-base mb-8">Pendientes de aprobación por supervisor</p>
 

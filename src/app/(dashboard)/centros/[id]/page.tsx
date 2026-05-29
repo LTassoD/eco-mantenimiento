@@ -64,7 +64,7 @@ export default function CenterDetailPage() {
   if (!center) return <div className="p-10 text-center text-brand-gray/60">Centro no encontrado</div>;
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
       <div className="flex items-center justify-between mb-8">
         <h2 className="font-heading font-bold text-3xl text-brand-blue">
           {editing ? "Editar centro" : center.name}

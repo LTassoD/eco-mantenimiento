@@ -21,7 +21,7 @@ export default async function AdminUsersPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div className="flex items-center justify-between mb-8">
         <h2 className="font-heading font-bold text-3xl text-brand-blue">Usuarios</h2>
         <a
@@ -32,8 +32,8 @@ export default async function AdminUsersPage() {
         </a>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="w-full text-base">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+        <table className="w-full text-base min-w-[640px]">
           <thead className="bg-brand-blue text-white">
             <tr>
               <th className="text-left px-4 py-3 font-medium">Nombre</th>

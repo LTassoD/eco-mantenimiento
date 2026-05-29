@@ -41,7 +41,7 @@ export default async function DashboardPage() {
   const totalCost = costAgg._sum.totalCost ?? 0;
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <h2 className="font-heading font-bold text-3xl text-brand-blue mb-2">
         Bienvenido, {dbUser.name}
       </h2>

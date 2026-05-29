@@ -60,7 +60,7 @@ export default async function MaintenancePage({
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-heading font-bold text-3xl text-brand-blue">Mantenimiento</h2>
         <a href="/maintenance/nuevo" className="bg-brand-blue text-white font-heading font-bold px-5 py-2.5 rounded-xl text-sm hover:opacity-90 transition">
@@ -105,8 +105,8 @@ export default async function MaintenancePage({
         </Link>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="w-full text-base">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+        <table className="w-full text-base min-w-[640px]">
           <thead className="bg-brand-blue text-white">
             <tr>
               <th className="text-left px-4 py-3 font-medium">Título</th>
