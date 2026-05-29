@@ -15,8 +15,8 @@ export async function middleware(request: NextRequest) {
   const { supabaseResponse, user } = await updateSession(request);
   const pathname = request.nextUrl.pathname;
 
-  if (pathname === "/login" || pathname === "/") {
-    if (user) return NextResponse.redirect(new URL("/dashboard", request.url));
+  if (pathname === "/login" || pathname === "/" || pathname.startsWith("/api/login")) {
+    if (user && pathname === "/login") return NextResponse.redirect(new URL("/dashboard", request.url));
     return supabaseResponse;
   }
 
