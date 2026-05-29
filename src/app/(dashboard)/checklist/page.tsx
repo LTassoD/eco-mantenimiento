@@ -1,15 +1,18 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ChecklistPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [responses, setResponses] = useState<Record<string, string>>({});
+  const [itemsLoaded, setItemsLoaded] = useState(false);
+  const [photos, setPhotos] = useState<Record<string, string>>({});
   const [signature, setSignature] = useState<string | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const searchParams = useSearchParams();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const router = useRouter();
 
@@ -22,10 +25,22 @@ export default function ChecklistPage() {
   useEffect(() => {
     fetch("/api/checklist").then(r => r.json()).then(d => {
       setData(d);
-      if (d.vehicles?.length === 1) setVehicleId(d.vehicles[0].id);
+      const prefillVehicle = searchParams.get("vehicleId");
+      const prefillShift = searchParams.get("shift");
+      const prefillKm = searchParams.get("currentKm");
+      if (prefillVehicle && d.vehicles?.some((v: any) => v.id === prefillVehicle)) setVehicleId(prefillVehicle);
+      else if (d.vehicles?.length === 1) setVehicleId(d.vehicles[0].id);
+      if (prefillShift) setShift(prefillShift);
+      if (prefillKm) setCurrentKm(prefillKm);
+      if (d.template?.items) {
+        const defaults: Record<string, string> = {};
+        d.template.items.forEach((item: any) => { defaults[item.id] = "yes"; });
+        setResponses(defaults);
+        setItemsLoaded(true);
+      }
       setLoading(false);
     });
-  }, []);
+  }, [searchParams]);
 
   function startDrawing(e: React.MouseEvent | React.TouchEvent) {
     const canvas = canvasRef.current;
@@ -66,6 +81,21 @@ export default function ChecklistPage() {
     setSignature(null);
   }
 
+  function takePhoto(itemId: string) {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.capture = "environment";
+    input.onchange = (e: any) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => setPhotos(prev => ({ ...prev, [itemId]: reader.result as string }));
+      reader.readAsDataURL(file);
+    };
+    input.click();
+  }
+
   function saveSignature() {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -89,7 +119,7 @@ export default function ChecklistPage() {
         currentKm,
         notes,
         digitalSignature: signature,
-        responses: Object.entries(responses).map(([itemId, value]) => ({ itemId, value })),
+        responses: Object.entries(responses).map(([itemId, value]) => ({ itemId, value, photoUrl: photos[itemId] || null })),
       }),
     });
 
@@ -101,8 +131,8 @@ export default function ChecklistPage() {
 
     const checklist = await res.json();
     window.open(`/api/checklist/pdf?id=${checklist.id}`, "_blank");
+    router.push("/checklist/historial");
     router.refresh();
-    setSubmitting(false);
   }
 
   if (loading) return <div className="p-10 text-center text-brand-gray/60">Cargando...</div>;
@@ -153,9 +183,27 @@ export default function ChecklistPage() {
             <h3 className="font-heading font-bold text-xl text-brand-blue mb-4">{category}</h3>
             <div className="space-y-4">
               {items.map((item: any) => (
-                <div key={item.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                  <span className="text-base">{item.name}</span>
-                  <div className="flex gap-2">
+                <div key={item.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0 gap-3">
+                  <span className="text-base flex-1">{item.name}</span>
+                  <div className="flex items-center gap-2">
+                    {responses[item.id] === "no" && (
+                      <div className="flex items-center gap-1">
+                        {photos[item.id] ? (
+                          <div className="relative">
+                            <img src={photos[item.id]} alt="Foto" className="w-10 h-10 rounded object-cover border" />
+                            <button type="button" onClick={() => setPhotos(prev => { const p = { ...prev }; delete p[item.id]; return p; })}
+                              className="absolute -top-1.5 -right-1.5 bg-red-500 text-white w-4 h-4 rounded-full text-xs leading-none"
+                            >×</button>
+                          </div>
+                        ) : (
+                          <button type="button" onClick={() => takePhoto(item.id)}
+                            className="text-brand-blue hover:text-brand-green transition text-xl" title="Tomar foto"
+                          >
+                            📷
+                          </button>
+                        )}
+                      </div>
+                    )}
                     {["yes", "no", "na"].map((val) => (
                       <button key={val} type="button" onClick={() => setResponses(prev => ({ ...prev, [item.id]: val }))}
                         className={`px-5 py-2 rounded-lg text-sm font-medium transition border ${responses[item.id] === val
@@ -165,7 +213,7 @@ export default function ChecklistPage() {
                           : "bg-white text-brand-gray border-gray-300 hover:border-gray-400"
                         }`}
                       >
-                        {val === "yes" ? "Bien" : val === "no" ? "Mal" : "N/A"}
+                        {val === "yes" ? "Estandar" : val === "no" ? "Bajo Estandar" : "No Aplica"}
                       </button>
                     ))}
                   </div>

@@ -48,7 +48,7 @@ export async function GET(request: Request) {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
 
-  const label: Record<string, string> = { yes: "Bien", no: "Mal", na: "N/A" };
+  const label: Record<string, string> = { yes: "Estandar", no: "Bajo Estandar", na: "No Aplica" };
   const color: Record<string, [number, number, number]> = { yes: [0, 128, 0], no: [255, 0, 0], na: [128, 128, 128] };
 
   for (const r of checklist.responses) {

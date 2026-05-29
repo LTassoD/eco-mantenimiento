@@ -15,11 +15,13 @@ export async function GET() {
     include: { items: { orderBy: { order: "asc" } } },
   });
 
+  const vehicleWhere: any = { isActive: true };
+  if (dbUser.role === "DRIVER" && dbUser.workCenterId) {
+    vehicleWhere.workCenterId = dbUser.workCenterId;
+  }
+
   const vehicles = await prisma.vehicle.findMany({
-    where: {
-      isActive: true,
-      OR: dbUser.role === "DRIVER" ? [{ driverId: dbUser.id }] : undefined,
-    },
+    where: vehicleWhere,
     include: { workCenter: true },
   });
 

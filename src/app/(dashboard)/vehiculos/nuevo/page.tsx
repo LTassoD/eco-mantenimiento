@@ -85,6 +85,23 @@ export default function NewVehiclePage() {
           <input name="kmServiceInterval" type="number" className="w-full px-4 py-3 border border-gray-300 rounded-xl text-base outline-none focus:ring-2 focus:ring-brand-blue" placeholder="Ej: 5000" />
         </div>
 
+        <h3 className="font-heading font-bold text-lg text-brand-blue pt-2">Vencimiento de documentos</h3>
+
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-brand-gray mb-1.5">Revisión técnica</label>
+            <input name="revisionTecnicaExp" type="date" className="w-full px-4 py-3 border border-gray-300 rounded-xl text-base outline-none focus:ring-2 focus:ring-brand-blue" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-brand-gray mb-1.5">Permiso circulación</label>
+            <input name="permisoCirculacionExp" type="date" className="w-full px-4 py-3 border border-gray-300 rounded-xl text-base outline-none focus:ring-2 focus:ring-brand-blue" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-brand-gray mb-1.5">Seguro obligatorio</label>
+            <input name="seguroObligatorioExp" type="date" className="w-full px-4 py-3 border border-gray-300 rounded-xl text-base outline-none focus:ring-2 focus:ring-brand-blue" />
+          </div>
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-brand-gray mb-1.5">Conductor asignado</label>
           <select name="driverId" className="w-full px-4 py-3 border border-gray-300 rounded-xl text-base outline-none focus:ring-2 focus:ring-brand-blue bg-white">

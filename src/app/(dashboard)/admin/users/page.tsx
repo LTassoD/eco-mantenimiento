@@ -42,12 +42,13 @@ export default async function AdminUsersPage() {
               <th className="text-left px-4 py-3 font-medium">Centro</th>
               <th className="text-left px-4 py-3 font-medium">Estado</th>
               <th className="text-left px-4 py-3 font-medium">Creado</th>
+              <th className="text-right px-4 py-3 font-medium">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {users.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-brand-gray/60">
+                <td colSpan={7} className="px-4 py-8 text-center text-brand-gray/60">
                   No hay usuarios registrados
                 </td>
               </tr>
@@ -69,6 +70,9 @@ export default async function AdminUsersPage() {
                 </td>
                 <td className="px-4 py-3 text-brand-gray/70">
                   {new Date(u.createdAt).toLocaleDateString("es-CL")}
+                </td>
+                <td className="px-4 py-3 text-right">
+                  <a href={`/admin/users/${u.id}`} className="text-brand-blue hover:underline text-sm font-medium">Editar</a>
                 </td>
               </tr>
             ))}

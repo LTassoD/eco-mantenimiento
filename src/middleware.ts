@@ -3,9 +3,10 @@ import { updateSession } from "@/lib/supabase/middleware";
 
 const roleRoutes: Record<string, string[]> = {
   "/admin": ["ADMIN", "SUPERVISOR"],
-  "/vehiculos": ["ADMIN", "SUPERVISOR"],
+  "/centros": ["ADMIN", "SUPERVISOR"],
+  "/vehiculos": ["ADMIN", "SUPERVISOR", "MANAGER"],
   "/checklist": ["DRIVER", "SUPERVISOR", "ADMIN"],
-  "/maintenance": ["MECHANIC", "SUPERVISOR", "ADMIN"],
+  "/maintenance": ["MECHANIC", "SUPERVISOR", "ADMIN", "MANAGER"],
   "/reports": ["MANAGER", "ADMIN"],
   "/dashboard": ["ADMIN", "DRIVER", "SUPERVISOR", "MECHANIC", "MANAGER"],
 };

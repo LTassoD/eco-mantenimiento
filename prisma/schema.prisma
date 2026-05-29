@@ -90,6 +90,9 @@ model Vehicle {
   nextServiceKm   Int?
   /// Cada cuántos km se hace mantenimiento
   kmServiceInterval Int?
+  revisionTecnicaExp  DateTime? /// Vencimiento revisión técnica
+  permisoCirculacionExp DateTime? /// Vencimiento permiso de circulación
+  seguroObligatorioExp  DateTime? /// Vencimiento seguro obligatorio
   isActive        Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

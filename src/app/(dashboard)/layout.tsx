@@ -57,10 +57,19 @@ export default async function DashboardLayout({
           {["ADMIN", "SUPERVISOR", "DRIVER"].includes(dbUser.role) && (
             <DashboardLink href="/checklist" label="Checklist" />
           )}
+          {["ADMIN", "SUPERVISOR", "DRIVER"].includes(dbUser.role) && (
+            <DashboardLink href="/checklist/historial" label="Historial" />
+          )}
           {["ADMIN", "SUPERVISOR"].includes(dbUser.role) && (
+            <DashboardLink href="/checklist/revisar" label="Revisar" />
+          )}
+          {["ADMIN", "SUPERVISOR"].includes(dbUser.role) && (
+            <DashboardLink href="/centros" label="Centros" />
+          )}
+          {["ADMIN", "SUPERVISOR", "MANAGER"].includes(dbUser.role) && (
             <DashboardLink href="/vehiculos" label="Vehículos" />
           )}
-          {["ADMIN", "SUPERVISOR", "MECHANIC"].includes(dbUser.role) && (
+          {["ADMIN", "SUPERVISOR", "MECHANIC", "MANAGER"].includes(dbUser.role) && (
             <DashboardLink href="/maintenance" label="Mantenimiento" />
           )}
           {["ADMIN", "MANAGER"].includes(dbUser.role) && (

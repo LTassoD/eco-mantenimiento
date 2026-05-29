@@ -7,7 +7,7 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 
 async function main() {
-  const centers = ["Zona Austral", "Zona Centro Sur", "Softys", "Embotelladoras", "El Olivar", "Alfalfal"];
+  const centers = ["Zona Austral", "Zona Centro Sur", "Softys", "Embotelladoras", "El Olivar", "Alfalfal", "Papeles Cordillera"];
 
   for (const name of centers) {
     await pool.query(`INSERT INTO "WorkCenter" (id, name, "createdAt") VALUES (gen_random_uuid(), $1, NOW()) ON CONFLICT (name) DO NOTHING`, [name]);
