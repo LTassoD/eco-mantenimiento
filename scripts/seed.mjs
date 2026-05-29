@@ -29,7 +29,7 @@ async function main() {
     });
 
     if (error) {
-      if (error.message.includes("already exists")) {
+      if (error.message.includes("already been registered")) {
         const { data: existing } = await supabase.auth.admin.listUsers();
         const found = existing.users.find(x => x.email === u.email);
         if (found) {
